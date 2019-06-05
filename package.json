@@ -1,0 +1,33 @@
+{
+  "name": "node_demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/app.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./dist/app.js",
+    "build": "tsc",
+    "clean": "rimraf dist"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@types/inquirer": "^6.0.3",
+    "cli-progress": "^2.1.1",
+    "command-line-args": "^5.1.1",
+    "inquirer": "^6.3.1",
+    "request": "^2.88.0",
+    "request-progress": "^3.0.0",
+    "rimraf": "^2.6.3",
+    "rss-parser": "^3.7.1",
+    "typescript": "^3.5.1"
+  },
+  "devDependencies": {
+    "@types/cli-progress": "^1.8.1",
+    "@types/command-line-args": "^5.0.0",
+    "@types/log-update": "^3.1.0",
+    "@types/request": "^2.48.1",
+    "@types/xml2js": "^0.4.4",
+    "tslint": "^5.17.0"
+  }
+}
