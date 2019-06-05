@@ -1,12 +1,12 @@
 import * as argparse from 'command-line-args';
 import * as Parser from 'rss-parser';
-import * as readline from 'readline';
 import * as request from 'request';
 import * as fs from 'fs';
 import * as progressBar from 'cli-progress';
+import * as inquirer from 'inquirer';
 
 class AppConfig {
-    verbose: boolean;
+    public verbose: boolean;
 
     constructor() {
         this.verbose = false;
@@ -23,10 +23,9 @@ function main() {
     const cliOpts = [
         { name: 'verbose', alias: 'v', type: Boolean },
         { name: 'help', alias: 'h', type: Boolean },
-        { name: 'feed_url', type: String, defaultOption: true }
+        { name: 'feed_url', type: String, defaultOption: true },
     ];
     const args = argparse(cliOpts);
-    console.log(args);
 
     // Print help and exit if help cli flag is present
     if (args.help) {
@@ -39,8 +38,6 @@ function main() {
         APP.verbose = true;
     }
 
-    console.log(APP);
-
     let parser = new Parser();
 
     if (!args.feed_url) {
@@ -51,19 +48,18 @@ function main() {
     parser.parseURL(args.feed_url).then((feed) => {
         console.log(`${feed.title}\n${feed.description}\n\n`);
         if (feed.items) {
-            for (const i in feed.items) {
-                const item = feed.items[i];
-                console.log(`[${i}] ${item.title}`);
-            }
-
-            const rl = readline.createInterface({
-                input: process.stdin,
-                output: process.stdout
+            const items = feed.items;
+            const listItems = items.map((item, idx) => {
+                return {name: item.title, value: idx};
             });
-            rl.question('\nSelect episode: ', (answer) => {
-                console.log(answer);
-                const episodeIdx = parseInt(answer, 10);
-                rl.close();
+            inquirer.prompt({
+                choices: listItems,
+                message: 'Select an episode',
+                name: 'episode',
+                pageSize: 30,
+                type: 'list',
+            }).then((answer: {episode: number}) => {
+                const episodeIdx = answer.episode;
 
                 if (feed.items === undefined) {
                     console.log('Feed was empty');
@@ -71,16 +67,9 @@ function main() {
                 }
 
                 const episode = feed.items[episodeIdx];
-                console.log(episode.enclosure);
-                let title;
-                if (episode.title) {
-                    title = episode.title;
-                } else {
-                    title = 'Episode';
-                }
+                const title = episode.title ? episode.title : 'Episode';
                 downloadEpisode(`${title}.mp3`, episode.enclosure.url, episode.enclosure.length);
             });
-
         }
     });
 }
@@ -95,7 +84,6 @@ function downloadEpisode(name: string, url: string, size: number) {
     progress(request(url), {})
         .on('progress', (state) => {
             bar.update(Math.round(state.percent * 100));
-            // console.log('progress', state);
         })
         .on('error', (err) => {
             console.log(err);
@@ -103,14 +91,15 @@ function downloadEpisode(name: string, url: string, size: number) {
         .on('end', () => {
             bar.update(100);
             bar.stop();
+            console.log(`File '${name}' download complete!`);
         })
         .pipe(fs.createWriteStream(name));
 }
 
-// function vlog(...args: [String]) {
-//     if (APP.verbose) {
-//         console.log(...args);
-//     }
-// }
+function vlog(...args: [String]) {
+    if (APP.verbose) {
+        console.log(...args);
+    }
+}
 
 main();
