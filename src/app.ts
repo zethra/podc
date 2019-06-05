@@ -14,9 +14,9 @@ class AppConfig {
 }
 
 let APP = new AppConfig();
-let HELP = `node_demo
+let HELP = `podcast cather
 
-a demo node cli application`;
+a podcast catcher`;
 
 function main() {
     // Parse cli args
