@@ -4,6 +4,7 @@ import * as request from 'request';
 import * as fs from 'fs';
 import * as progressBar from 'cli-progress';
 import * as inquirer from 'inquirer';
+import * as commandLineUsage from 'command-line-usage';
 
 class AppConfig {
     public verbose: boolean;
@@ -14,9 +15,6 @@ class AppConfig {
 }
 
 let APP = new AppConfig();
-let HELP = `podcast cather
-
-a podcast catcher`;
 
 function main() {
     // Parse cli args
@@ -29,7 +27,7 @@ function main() {
 
     // Print help and exit if help cli flag is present
     if (args.help) {
-        console.log(HELP);
+        help();
         return;
     }
 
@@ -41,8 +39,7 @@ function main() {
     let parser = new Parser();
 
     if (!args.feed_url) {
-        console.log(HELP);
-        return;
+        usage_and_exit();
     }
 
     parser.parseURL(args.feed_url).then((feed) => {
@@ -63,6 +60,8 @@ function main() {
 
                 if (feed.items === undefined) {
                     console.log('Feed was empty');
+                    process.exit(2);
+                    // Compiler doesn't realize this ^ exits I so I need to return?
                     return;
                 }
 
@@ -87,6 +86,7 @@ function downloadEpisode(name: string, url: string, size: number) {
         })
         .on('error', (err) => {
             console.log(err);
+            process.exit(3);
         })
         .on('end', () => {
             bar.update(100);
@@ -94,6 +94,35 @@ function downloadEpisode(name: string, url: string, size: number) {
             console.log(`File '${name}' download complete!`);
         })
         .pipe(fs.createWriteStream(name));
+}
+
+function usage_and_exit() {
+    const usage = 'podc [-hv] <feed url>';
+    console.log(usage);
+    process.exit(1);
+}
+
+function help() {
+    const sections = [
+        {
+            header: 'podc',
+            content: 'A podcast catcher'
+        },
+        {
+            header: 'Options',
+            optionList: [
+                {
+                    name: 'help',
+                    description: 'Print this help message'
+                },
+                {
+                    name: 'verbose',
+                    description: 'Print more details of operation (mostly for debugging)'
+                }
+            ]
+        }
+    ];
+    console.log(commandLineUsage(sections));
 }
 
 function vlog(...args: [String]) {
