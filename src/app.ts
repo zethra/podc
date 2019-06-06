@@ -14,7 +14,7 @@ class AppConfig {
     }
 }
 
-let APP = new AppConfig();
+const APP = new AppConfig();
 
 function main() {
     // Parse cli args
@@ -36,7 +36,7 @@ function main() {
         APP.verbose = true;
     }
 
-    let parser = new Parser();
+    const parser = new Parser();
 
     if (!args.feed_url) {
         usage_and_exit();
