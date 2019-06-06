@@ -1,7 +1,7 @@
 {
-  "name": "podcast_catcher",
+  "name": "podc",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple podcast catcher",
   "main": "src/app.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
