@@ -11,6 +11,7 @@
   },
   "author": "",
   "license": "MIT",
+  "preferGlobal": true,
   "dependencies": {
     "cli-progress": "^2.1.1",
     "command-line-args": "^5.1.1",
