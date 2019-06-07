@@ -5,6 +5,7 @@ import * as fs from 'fs';
 import * as progressBar from 'cli-progress';
 import * as inquirer from 'inquirer';
 import * as commandLineUsage from 'command-line-usage';
+import { playEpisode } from './player';
 
 /**
  * Global application state.
@@ -136,6 +137,8 @@ function downloadEpisode(name: string, url: string, size: number) {
             // Stop the bar so it releases the terminal
             bar.stop();
             console.log(`File '${name}' download complete!`);
+            console.log('Playing...');
+            playEpisode(name);
         })
         // Save the file to the name provided
         .pipe(fs.createWriteStream(name));

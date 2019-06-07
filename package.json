@@ -13,24 +13,28 @@
   "license": "MIT",
   "preferGlobal": true,
   "dependencies": {
+    "audio-context": "^1.0.3",
+    "audio-loader": "^1.0.3",
+    "audio-play": "^2.2.1",
     "cli-progress": "^2.1.1",
     "command-line-args": "^5.1.1",
     "command-line-usage": "^5.0.5",
     "inquirer": "^6.3.1",
+    "keypress": "^0.2.1",
     "request": "^2.88.0",
     "request-progress": "^3.0.0",
     "rss-parser": "^3.7.1"
   },
   "devDependencies": {
-    "rimraf": "^2.6.3",
-    "typescript": "^3.5.1",
-    "@types/inquirer": "^6.0.3",
     "@types/cli-progress": "^1.8.1",
     "@types/command-line-args": "^5.0.0",
     "@types/command-line-usage": "^5.0.1",
+    "@types/inquirer": "^6.0.3",
     "@types/log-update": "^3.1.0",
     "@types/request": "^2.48.1",
     "@types/xml2js": "^0.4.4",
-    "tslint": "^5.17.0"
+    "rimraf": "^2.6.3",
+    "tslint": "^5.17.0",
+    "typescript": "^3.5.1"
   }
 }
