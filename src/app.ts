@@ -93,9 +93,9 @@ function main() {
             const episode = feed.items[episodeIdx];
             // Download the episode
             const title = episode.title ? episode.title : 'Episode';
-            // TODO use the information about MIME type from the fss feed to
-            // decide the file extension
-            downloadEpisode(`${title}.mp3`, episode.enclosure.url, episode.enclosure.length);
+            // Grab file extension form the url
+            const fileExt = episode.enclosure.url.split('.').pop();
+            downloadEpisode(`${title}.${fileExt}`, episode.enclosure.url, episode.enclosure.length);
         });
     });
 }
